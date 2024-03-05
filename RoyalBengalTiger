@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract RoyalBengalTiger is ERC20 {
+    // Address that will initially hold all tokens
+    address public owner;
+
+    // Modifier to restrict certain functions to the contract owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the contract owner");
+        _;
+    }
+
+    // Constructor to set initial values
+    constructor() ERC20("RoyalBengalTiger", "RBT") {
+        // Set the total supply (1 trillion RBT)
+        _mint(msg.sender, 1_000_000_000_000 * 10**decimals());
+
+        // Set the contract owner to the deployer
+        owner = msg.sender;
+    }
+
+    // Function to mint new tokens (only accessible by the owner)
+    function mint(address account, uint256 amount) public onlyOwner {
+        _mint(account, amount);
+    }
+}
